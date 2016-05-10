@@ -1,0 +1,1 @@
+[[ -d $DIRECTORY ]] || mkdir $DIRECTORY
