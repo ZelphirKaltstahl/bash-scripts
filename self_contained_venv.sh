@@ -97,7 +97,7 @@ python_version_supplied=0
 packages_supplied=0
 virtualenv_url_supplied=0
 
-while getopts n:d:p:v:i: opts; do
+while getopts n:d:p:v: opts; do #while getopts n:d:p:v:i: opts; do
 	case $opts in
 		n)
 			venv_name=$OPTARG
@@ -110,17 +110,25 @@ while getopts n:d:p:v:i: opts; do
 		p)
 			python_url=$OPTARG
 			python_url_supplied=1
+			python_version_supplied=1  #when you get the url, you also know the version
 			;;
 		v)
 			virtualenv_url=$OPTARG
 			virtualenv_url_supplied=1
 			;;
-		i)
-			python_version=$OPTARG
-			python_version_supplied=1
-			;;
+		# i)
+		# 	python_version=$OPTARG
+		# 	python_version_supplied=1
+		# 	;;
 	esac
 done
+
+IFS='-' read -ra python_url_parts <<< "${python_url}"
+url_ending="${python_url_parts[1]}"
+IFS='.' read -ra version_numbers <<< "${url_ending}"
+echo "${version_numbers[@]}"
+python_version="${version_numbers[0]}.${version_numbers[1]}"
+# echo "Python version:|${python_version}|"
 
 echo ""
 echo -e "${MESSAGE_COLOR}MSG:${NO_COLOR} The pipe (\"|\") character is a delimiter:"
@@ -130,7 +138,6 @@ echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: python_version: |${python_version}|"
 echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: virtualenv_url: |${virtualenv_url}|"
 echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: packages: |${packages}|"
 echo ""
-
 
 # then check if all mandatory parameters were supplied
 # and print error messages if a mandatory parameter has not been supplied
@@ -374,6 +381,16 @@ else
 	echo -e "${ERROR_COLOR}ERR${NO_COLOR}: aliasing pip ${ERROR_COLOR}failed${NO_COLOR}"
 	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: you may fix this one on your own"
 	exit 1
+fi
+
+# updating pip
+echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: Now updating pip if newer version available ..."
+${venv_dir}/localpython/bin/pip${python_version} install --upgrade pip
+if [[ $? -eq 0 ]]; then
+	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: updating pip if newer version available \033[1;92msuccessful${NO_COLOR}"
+else
+	echo -e "${ERROR_COLOR}ERR${NO_COLOR}: updating pip if newer version available ${ERROR_COLOR}failed${NO_COLOR}"
+	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: you may fix this one on your own"
 fi
 
 # make it relocatable
