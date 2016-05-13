@@ -334,27 +334,12 @@ fi
 # creating the virtualenv
 echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: now creating new virtual environment ..."
 cd ${venv_dir} >> /dev/null
-${venv_dir}/localpython/bin/virtualenv --python="${venv_dir}/localpython/bin/python${python_version}" .
+${venv_dir}/localpython/bin/virtualenv --python="${venv_dir}/localpython/bin/python${python_version}" --no-site-packages .
 if [[ $? -eq 0 ]]; then
 	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: virtualenv creation \033[1;92msuccessful${NO_COLOR}"
 else
 	echo -e "${ERROR_COLOR}ERR${NO_COLOR}: virtualenv creation ${ERROR_COLOR}failed${NO_COLOR}"
 	exit 1
-fi
-
-# installing pip packages
-if [[ $packages_supplied -eq 1 ]]; then
-	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: now installing packages ..."
-	pip install $packages
-	if [[ $? -eq 0 ]]; then
-		echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: packages installation \033[1;92msuccessful${NO_COLOR}"
-	else
-		echo -e "${ERROR_COLOR}ERR${NO_COLOR}: packages installation ${ERROR_COLOR}failed${NO_COLOR}"
-		echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: you may fix this one on your own"
-		exit 1
-	fi
-else
-	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: ${WARNING_COLOR}skipping${NO_COLOR} packages installation, because none have been supplied"
 fi
 
 # use local virtualenv in the future
@@ -391,6 +376,21 @@ if [[ $? -eq 0 ]]; then
 else
 	echo -e "${ERROR_COLOR}ERR${NO_COLOR}: updating pip if newer version available ${ERROR_COLOR}failed${NO_COLOR}"
 	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: you may fix this one on your own"
+fi
+
+# installing pip packages
+if [[ $packages_supplied -eq 1 ]]; then
+	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: now installing packages ..."
+	localpython/bin/pip${python_version} install $packages
+	if [[ $? -eq 0 ]]; then
+		echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: packages installation \033[1;92msuccessful${NO_COLOR}"
+	else
+		echo -e "${ERROR_COLOR}ERR${NO_COLOR}: packages installation ${ERROR_COLOR}failed${NO_COLOR}"
+		echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: you may fix this one on your own"
+		exit 1
+	fi
+else
+	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: ${WARNING_COLOR}skipping${NO_COLOR} packages installation, because none have been supplied"
 fi
 
 # make it relocatable
