@@ -90,6 +90,7 @@ MESSAGE_COLOR="${BIBlue}"
 ERROR_COLOR="${BIRed}"
 WARNING_COLOR="${BIYellow}"
 NO_COLOR="${Color_Off}"
+SUCCESS_COLOR="${BIGreen}"
 
 venv_name_supplied=0
 python_url_supplied=0
@@ -215,7 +216,7 @@ if [ $? -eq 0 ]; then
 fi
 
 if [[ $localpython_src_dir_created -eq 1 ]] && [[ $localpython_dir_created -eq 1 ]] && [[ $virtualenv_src_dir_created -eq 1 ]]; then
-	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: creation of directory structure \033[1;92msuccessful${NO_COLOR}"
+	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: creation of directory structure ${SUCCESS_COLOR}successful${NO_COLOR}"
 else
 	echo -e "${ERROR_COLOR}ERR${NO_COLOR}: creation of directory structure ${ERROR_COLOR}failed${NO_COLOR}"
 	exit 1
@@ -231,7 +232,7 @@ pushd localpython_src
 echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: now downloading python source ..."
 wget $python_url
 if [ $? -ne 1 ]; then
-	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: download of python source \033[1;92msuccessful${NO_COLOR}"
+	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: download of python source ${SUCCESS_COLOR}successful${NO_COLOR}"
 else
 	echo -e "${ERROR_COLOR}ERR${NO_COLOR}: download of python source ${ERROR_COLOR}failed${NO_COLOR}"
 	exit 1
@@ -241,7 +242,7 @@ for filename in *.tar.xz; do
 	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: now extracting $filename ..."
     tar -xvf $filename 2>&1 1> python_extract_log
     if [[ $? -eq 0 ]]; then
-    	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: python extraction \033[1;92msuccessful${NO_COLOR}"
+    	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: python extraction ${SUCCESS_COLOR}successful${NO_COLOR}"
     else
     	echo -e "${ERROR_COLOR}ERR${NO_COLOR}: python extraction ${ERROR_COLOR}failed${NO_COLOR}"
 		exit 1
@@ -263,7 +264,7 @@ echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: now configuring python ..."
 echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: logging to ${PWD}/python_configure_log"
 ./configure --prefix=$python_build_dir 2>&1 1> python_configure_log
 if [ $? -ne 1 ]; then
-	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: python configure \033[1;92msuccessful${NO_COLOR}"
+	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: python configure ${SUCCESS_COLOR}successful${NO_COLOR}"
 else
 	echo -e "${ERROR_COLOR}ERR${NO_COLOR}: python configure ${ERROR_COLOR}failed${NO_COLOR}"
 	exit 1
@@ -273,7 +274,7 @@ echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: now compiling python ..."
 echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: logging to ${PWD}/python_make_log"
 make -j4 &> python_make_log
 if [ $? -ne 1 ]; then
-	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: python compilation \033[1;92msuccessful${NO_COLOR}"
+	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: python compilation ${SUCCESS_COLOR}successful${NO_COLOR}"
 else
 	echo -e "${ERROR_COLOR}ERR${NO_COLOR}: python compilation ${ERROR_COLOR}failed${NO_COLOR}"
 	exit 1
@@ -284,7 +285,7 @@ echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: now installing python ..."
 echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: logging to ${PWD}/python_make_install_log"
 make install &> "${PWD}/python_make_install_log"
 if [[ $? -eq 0 ]]; then
-	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: python install \033[1;92msuccessfully${NO_COLOR}"
+	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: python install ${SUCCESS_COLOR}successfully${NO_COLOR}"
 else
 	echo -e "${ERROR_COLOR}ERR${NO_COLOR}: python installation ${ERROR_COLOR}failed${NO_COLOR}"
 	exit 1
@@ -302,7 +303,7 @@ echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: PWD: ${PWD}"
 echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: now downloading virtualenv ..."
 wget $virtualenv_url
 if [ $? -eq 0 ]; then
-	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: virtualenv source download \033[1;92msuccessful${NO_COLOR}"
+	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: virtualenv source download ${SUCCESS_COLOR}successful${NO_COLOR}"
 else
 	echo -e "${ERROR_COLOR}ERR${NO_COLOR}: virtualenv source download ${ERROR_COLOR}failed${NO_COLOR}"
 	exit 1
@@ -312,7 +313,7 @@ for filename in *.tar.gz; do
 	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: now extracting $filename ..."
     tar -xvf $filename &> virtualenv_extract_log
     if [[ $? -eq 0 ]]; then
-    	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: virtualenv extraction \033[1;92msuccessful${NO_COLOR}"
+    	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: virtualenv extraction ${SUCCESS_COLOR}successful${NO_COLOR}"
     else
     	echo -e "${ERROR_COLOR}ERR${NO_COLOR}: virtualenv extraction ${ERROR_COLOR}failed${NO_COLOR}"
 		exit 1
@@ -325,7 +326,7 @@ echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: now installing virtualenv ..."
 echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: logging to ${PWD}/virtualenv_install_log"
 ${venv_dir}/localpython/bin/python${python_version} setup.py install &> virtualenv_install_log
 if [[ $? -eq 0 ]]; then
-	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: virtualenv installation \033[1;92msuccessful${NO_COLOR}"
+	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: virtualenv installation ${SUCCESS_COLOR}successful${NO_COLOR}"
 else
 	echo -e "${ERROR_COLOR}ERR${NO_COLOR}: virtualenv installation ${ERROR_COLOR}failed${NO_COLOR}"
 	exit 1
@@ -336,7 +337,7 @@ echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: now creating new virtual environment ..
 cd ${venv_dir} >> /dev/null
 ${venv_dir}/localpython/bin/virtualenv --python="${venv_dir}/localpython/bin/python${python_version}" --no-site-packages .
 if [[ $? -eq 0 ]]; then
-	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: virtualenv creation \033[1;92msuccessful${NO_COLOR}"
+	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: virtualenv creation ${SUCCESS_COLOR}successful${NO_COLOR}"
 else
 	echo -e "${ERROR_COLOR}ERR${NO_COLOR}: virtualenv creation ${ERROR_COLOR}failed${NO_COLOR}"
 	exit 1
@@ -348,7 +349,7 @@ echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: Now making virtualenv point to the virt
 echo "### virtualenv alias" >> "${venv_dir}/bin/activate"
 echo "alias virtualenv='localpython/bin/virtualenv'" >> "${venv_dir}/bin/activate"
 if [[ $? -eq 0 ]]; then
-	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: aliasing virtualenv \033[1;92msuccessful${NO_COLOR}"
+	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: aliasing virtualenv ${SUCCESS_COLOR}successful${NO_COLOR}"
 else
 	echo -e "${ERROR_COLOR}ERR${NO_COLOR}: aliasing virtualenv ${ERROR_COLOR}failed${NO_COLOR}"
 	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: you may fix this one on your own"
@@ -358,46 +359,60 @@ fi
 # use local pip in the future
 echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: Now making pip point to the pip\${python_version} executable in the localpython distribution..."
 echo "### pip alias" >> "${venv_dir}/bin/activate"
-echo "alias pip='localpython/bin/pip'${python_version}" >> "${venv_dir}/bin/activate"
+echo "alias pip='localpython/bin/pip${python_version}'" >> "${venv_dir}/bin/activate"
 if [[ $? -eq 0 ]]; then
 	echo "" >> "${venv_dir}/bin/activate"
-	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: aliasing pip \033[1;92msuccessful${NO_COLOR}"
+	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: aliasing pip ${SUCCESS_COLOR}successful${NO_COLOR}"
 else
 	echo -e "${ERROR_COLOR}ERR${NO_COLOR}: aliasing pip ${ERROR_COLOR}failed${NO_COLOR}"
 	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: you may fix this one on your own"
 	exit 1
 fi
 
-# updating pip
-echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: Now updating pip if newer version available ..."
-${venv_dir}/localpython/bin/pip${python_version} install --upgrade pip
+# use local python in the future
+echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: Now aliasing python to point to the python\${python_version} executable in the localpython distribution..."
+echo "### python alias" >> "${venv_dir}/bin/activate"
+echo "alias python='localpython/bin/python${python_version}'" >> "${venv_dir}/bin/activate"
 if [[ $? -eq 0 ]]; then
-	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: updating pip if newer version available \033[1;92msuccessful${NO_COLOR}"
+	echo "" >> "${venv_dir}/bin/activate"
+	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: aliasing python ${SUCCESS_COLOR}successful${NO_COLOR}"
 else
-	echo -e "${ERROR_COLOR}ERR${NO_COLOR}: updating pip if newer version available ${ERROR_COLOR}failed${NO_COLOR}"
+	echo -e "${ERROR_COLOR}ERR${NO_COLOR}: aliasing python ${ERROR_COLOR}failed${NO_COLOR}"
 	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: you may fix this one on your own"
+	exit 1
 fi
 
-# installing pip packages
-if [[ $packages_supplied -eq 1 ]]; then
-	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: now installing packages ..."
-	localpython/bin/pip${python_version} install $packages
-	if [[ $? -eq 0 ]]; then
-		echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: packages installation \033[1;92msuccessful${NO_COLOR}"
-	else
-		echo -e "${ERROR_COLOR}ERR${NO_COLOR}: packages installation ${ERROR_COLOR}failed${NO_COLOR}"
-		echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: you may fix this one on your own"
-		exit 1
-	fi
-else
-	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: ${WARNING_COLOR}skipping${NO_COLOR} packages installation, because none have been supplied"
-fi
+# !!!commented out because not working!!!
+# # updating pip
+# echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: Now updating pip if newer version available ..."
+# ${venv_dir}/localpython/bin/pip${python_version} install --upgrade pip
+# if [[ $? -eq 0 ]]; then
+# 	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: updating pip if newer version available ${SUCCESS_COLOR}successful${NO_COLOR}"
+# else
+# 	echo -e "${ERROR_COLOR}ERR${NO_COLOR}: updating pip if newer version available ${ERROR_COLOR}failed${NO_COLOR}"
+# 	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: you may fix this one on your own"
+# fi
+#
+# # installing pip packages
+# if [[ $packages_supplied -eq 1 ]]; then
+# 	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: now installing packages ..."
+# 	localpython/bin/pip${python_version} install $packages
+# 	if [[ $? -eq 0 ]]; then
+# 		echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: packages installation ${SUCCESS_COLOR}successful${NO_COLOR}"
+# 	else
+# 		echo -e "${ERROR_COLOR}ERR${NO_COLOR}: packages installation ${ERROR_COLOR}failed${NO_COLOR}"
+# 		echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: you may fix this one on your own"
+# 		exit 1
+# 	fi
+# else
+# 	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: ${WARNING_COLOR}skipping${NO_COLOR} packages installation, because none have been supplied"
+# fi
 
 # make it relocatable
 echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: now making virtual environment relocatable ..."
 virtualenv --relocatable .
 if [[ $? -eq 0 ]]; then
-	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: making virtual environment relocatable \033[1;92msuccessful${NO_COLOR}"
+	echo -e "${MESSAGE_COLOR}MSG${NO_COLOR}: making virtual environment relocatable ${SUCCESS_COLOR}successful${NO_COLOR}"
 else
 	echo -e "${ERROR_COLOR}ERR${NO_COLOR}: making virtual environment relocatable ${ERROR_COLOR}failed${NO_COLOR}"
 	exit 1
